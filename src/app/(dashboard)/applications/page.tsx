@@ -35,6 +35,7 @@ export default function ApplicationsPage() {
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [newOptimizedCvUrl, setNewOptimizedCvUrl] = useState<string | null>(null);
   const [result, setResult] = useState<{
     match_score: number;
     pdf_url: string;
@@ -152,7 +153,24 @@ export default function ApplicationsPage() {
     } finally {
       setIsProcessing(false);
     }
+
   };
+
+  const getOptimizedCvLink = async (pdfUrl: string) => {
+    try {
+      const { data, error } = await supabase.storage.from("cvs").createSignedUrl(pdfUrl, 600);
+      if (error) {
+        throw error;
+      }
+      setNewOptimizedCvUrl(data?.signedUrl || null);
+      return data?.signedUrl || null;
+    } catch (err) {
+      console.error("Error generating signed URL for optimized CV:", err);
+      return null;
+    }
+
+  }
+
 
   if (loading) {
     return (
@@ -308,14 +326,14 @@ export default function ApplicationsPage() {
                     </div>
                   </div>
                 </div>
-                <a
-                  href={result.pdf_url}
-                  target="_blank"
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-green-700"
+                <button
+                  onClick={() => getOptimizedCvLink(result.pdf_url)}
+                  disabled={!newOptimizedCvUrl}
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-green-700 pointer"
                 >
                   <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                   View Optimized CV
-                </a>
+                </button>
               </div>
             </div>
           )}

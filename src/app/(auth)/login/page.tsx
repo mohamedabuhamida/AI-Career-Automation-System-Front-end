@@ -27,7 +27,7 @@ export default function LoginPage() {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        scopes: "https://www.googleapis.com/auth/gmail.send",
+        scopes: "https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.modify",
         redirectTo: `${window.location.origin}/callback?redirect=${redirect}`,
         queryParams: {
           access_type: "offline",
@@ -53,7 +53,7 @@ export default function LoginPage() {
             onClick={handleGoogleLogin}
             className="w-full inline-flex space-x-2 cursor-pointer items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
           >
-            <FcGoogle className="text-4xl mr-2"/>
+            <FcGoogle className="text-4xl mr-2" />
             Sign in with Google
           </button>
         </div>
