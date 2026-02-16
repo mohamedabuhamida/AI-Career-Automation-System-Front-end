@@ -17,6 +17,7 @@ import {
   ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/24/outline";
 import { startCvOptimization } from "@/lib/api";
+import Link from "next/link";
 
 interface CV {
   id: string;
@@ -326,14 +327,15 @@ export default function ApplicationsPage() {
                     </div>
                   </div>
                 </div>
-                <button
+                <Link
+                  href={newOptimizedCvUrl || "#"}
                   onClick={() => getOptimizedCvLink(result.pdf_url)}
-                  disabled={!newOptimizedCvUrl}
+                  
                   className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-green-700 pointer"
                 >
                   <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                   View Optimized CV
-                </button>
+                </Link>
               </div>
             </div>
           )}
